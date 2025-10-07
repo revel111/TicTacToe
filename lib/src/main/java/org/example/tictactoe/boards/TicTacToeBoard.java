@@ -2,6 +2,8 @@ package org.example.tictactoe.boards;
 
 import org.example.tictactoe.enums.PlayerType;
 
+import java.util.Arrays;
+
 /**
  * Represents a classic 3x3 Tic-Tac-Toe board that stores player moves.
  * <p>
@@ -17,13 +19,12 @@ public class TicTacToeBoard {
     public static final int SIZE = 3;
 
     /**
-     * Returns the internal 2D array representing the board state.
-     * Note: This is the live reference, not a defensive copy.
+     * Returns a copy of internal 2D array representing the board state.
      *
      * @return 2D array of {@link PlayerType} values; {@code null} entries indicate empty cells
      */
     public PlayerType[][] getPlayers() {
-        return players;
+        return Arrays.stream(players).map(PlayerType[]::clone).toArray(PlayerType[][]::new);
     }
 
     /**
@@ -51,7 +52,7 @@ public class TicTacToeBoard {
      * @throws IllegalArgumentException  if the target cell is already occupied
      */
     public void move(int row, int col, PlayerType player) {
-        if (row < 0 || row >= SIZE || col < 0 || col >= org.example.tictactoe.boards.TicTacToeBoard.SIZE) {
+        if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
             throw new IndexOutOfBoundsException("Cell is out of bounds");
         }
         if (players[row][col] != null) {
