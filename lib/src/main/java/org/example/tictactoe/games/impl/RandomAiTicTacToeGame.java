@@ -1,6 +1,7 @@
 package org.example.tictactoe.games.impl;
 
 import org.example.tictactoe.boards.TicTacToeBoard;
+import org.example.tictactoe.enums.GameState;
 import org.example.tictactoe.games.AiMove;
 import org.example.tictactoe.games.TicTacToeGame;
 import org.example.tictactoe.utils.Point;
@@ -42,7 +43,7 @@ public class RandomAiTicTacToeGame extends TicTacToeGame implements AiMove {
         do {
             row = random.nextInt(TicTacToeBoard.SIZE);
             col = random.nextInt(TicTacToeBoard.SIZE);
-        } while (board.getPlayer(row, col) != null);
+        } while (board.getPlayer(row, col) != null && gameState == GameState.IN_PROGRESS);
 
         return new Point(row, col);
     }

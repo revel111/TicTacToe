@@ -23,7 +23,7 @@ class TicTacToeTest {
         game.start();
         assertEquals("Player X", game.getCurrentPlayerName());
         assertEquals(PlayerType.X, game.getCurrentPlayerType());
-        game.move(0,0 );
+        game.move(0,0);
         assertEquals("Player O", game.getCurrentPlayerName());
         assertEquals(PlayerType.O, game.getCurrentPlayerType());
     }
@@ -32,8 +32,15 @@ class TicTacToeTest {
     void testPlayerInabilityToMoveOnOccupiedCell() {
         var game = new TicTacToeGame();
         game.start();
-        game.move(0,0 );
+        game.move(0,0);
         assertThrows(IllegalArgumentException.class,() -> game.move(0, 0));
+    }
+
+    @Test
+    void testPlayerInabilityToMoveOutOfBounds() {
+        var game = new TicTacToeGame();
+        game.start();
+        assertThrows(IndexOutOfBoundsException.class,() -> game.move(0, 4));
     }
 
     @Test

@@ -24,14 +24,24 @@ public class GameWrapper {
     private TicTacToeGame chooseGameMode() {
         System.out.println("Choose game mode:\n1 - Human vs Human\n2 - Human vs Random AI");
         int choice = readIntSafe();
-        return switch (choice) {
-            case 2 -> new RandomAiTicTacToeGame("Player X", "AI O");
-            case 1 -> new TicTacToeGame();
+        switch (choice) {
+            case 1 -> {
+                return new TicTacToeGame(askName("Player X"), askName("Player O"));
+            }
+            case 2 -> {
+                return new RandomAiTicTacToeGame(askName("Player X"), "AI O");
+            }
             default -> {
                 System.out.println("Unknown option. Defaulting to Human vs Human.");
-                yield new TicTacToeGame();
+                return new TicTacToeGame(askName("Player X"), askName("Player O"));
             }
-        };
+        }
+    }
+
+    private String askName(String defaultValue) {
+        System.out.printf("Enter name for %s: ", defaultValue);
+        String name = scanner.nextLine();
+        return name.trim().isBlank() ? defaultValue : name;
     }
 
     private void poll() {
