@@ -3,6 +3,7 @@ package org.example.tictactoe.games;
 import org.example.tictactoe.enums.GameState;
 import org.example.tictactoe.enums.PlayerType;
 import org.example.tictactoe.boards.TicTacToeBoard;
+import org.example.tictactoe.exceptions.FalseStateException;
 
 import java.util.Map;
 
@@ -95,11 +96,11 @@ public class TicTacToeGame {
     /**
      * Starts the game, transitioning the state to {@link GameState#IN_PROGRESS}.
      *
-     * @throws IllegalStateException if the game has already started or finished
+     * @throws FalseStateException if the game has already started or finished
      */
     public void start() {
         if (gameState != GameState.NOT_STARTED) {
-            throw new IllegalStateException("Game has already started or finished");
+            throw new FalseStateException("Game has already started or finished");
         }
         gameState = GameState.IN_PROGRESS;
     }
@@ -110,67 +111,26 @@ public class TicTacToeGame {
      * @param row zero-based row index
      * @param col zero-based column index
      * @return resulting {@link GameState} after the move
-     * @throws IllegalStateException if the game is not started or already over
-     * @throws IndexOutOfBoundsException if the coordinates are outside the board bounds
-     * @throws IllegalArgumentException if the target cell is already occupied
+     * @throws FalseStateException if the game is not started or already over
+     * @throws org.example.tictactoe.exceptions.CellOutOfBoundsException if the coordinates are outside the board bounds
+     * @throws org.example.tictactoe.exceptions.CellOccupiedException if the target cell is already occupied
      */
     public GameState move(int row, int col) {
         if (gameState == GameState.NOT_STARTED) {
-            throw new IllegalStateException("Game is not started");
+            throw new FalseStateException("Game is not started");
         } else if (gameState != GameState.IN_PROGRESS) {
-            throw new IllegalStateException("Game is already over");
+            throw new FalseStateException("Game is already over");
         }
 
         board.move(row, col, currentPlayer);
-        if (this.checkWin(row, col)) {
+        if (board.checkWin(row, col, currentPlayer)) {
             gameState = GameState.checkState(currentPlayer);
             return gameState;
-        } else if (this.checkDraw()) {
+        } else if (board.checkDraw()) {
             gameState = GameState.DRAW;
             return gameState;
         }
         currentPlayer = currentPlayer.getOpponent();
         return GameState.IN_PROGRESS;
-    }
-
-    private boolean checkWin(int row, int col) {
-        if (this.checkEntry(row, true) || this.checkEntry(col, false)) {
-            return true;
-        }
-        return this.checkDiagonals();
-    }
-
-    private boolean checkEntry(int entry, boolean isRow) {
-        for (int i = 0; i < TicTacToeBoard.SIZE; i++) {
-            if ((isRow ? currentPlayer != board.getPlayer(entry, i) : currentPlayer != board.getPlayer(i, entry))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean checkDiagonals() {
-        boolean leftToRight = true;
-        boolean rightToLeft = true;
-        for (int i = 0; i < TicTacToeBoard.SIZE; i++) {
-            if (board.getPlayer(i, i) != currentPlayer) {
-                leftToRight = false;
-            }
-            if (board.getPlayer(i, TicTacToeBoard.SIZE - 1 - i) != currentPlayer) {
-                rightToLeft = false;
-            }
-        }
-        return leftToRight || rightToLeft;
-    }
-
-    private boolean checkDraw() {
-        for (int i = 0; i < TicTacToeBoard.SIZE; i++) {
-            for (int j = 0; j < TicTacToeBoard.SIZE; j++) {
-                if (board.getPlayer(i, j) == null) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }

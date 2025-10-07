@@ -4,6 +4,7 @@ import org.example.tictactoe.boards.TicTacToeBoard;
 import org.example.tictactoe.enums.GameState;
 import org.example.tictactoe.games.AiMove;
 import org.example.tictactoe.games.TicTacToeGame;
+import org.example.tictactoe.games.impl.MinMaxAiTicTacToeGame;
 import org.example.tictactoe.games.impl.RandomAiTicTacToeGame;
 import org.example.tictactoe.utils.Point;
 
@@ -22,7 +23,7 @@ public class GameWrapper {
     }
 
     private TicTacToeGame chooseGameMode() {
-        System.out.println("Choose game mode:\n1 - Human vs Human\n2 - Human vs Random AI");
+        System.out.println("Choose game mode:\n1 - Human vs Human\n2 - Human vs Random AI\n3 - Human vs MinMax AI\n");
         int choice = readIntSafe();
         switch (choice) {
             case 1 -> {
@@ -30,6 +31,9 @@ public class GameWrapper {
             }
             case 2 -> {
                 return new RandomAiTicTacToeGame(askName("Player X"), "AI O");
+            }
+            case 3 -> {
+                return new MinMaxAiTicTacToeGame(askName("Player X"), "AI O");
             }
             default -> {
                 System.out.println("Unknown option. Defaulting to Human vs Human.");
@@ -88,6 +92,7 @@ public class GameWrapper {
             try {
                 return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException _) {
+                scanner.nextLine();
                 System.out.print("Please enter a valid number: ");
             }
         }

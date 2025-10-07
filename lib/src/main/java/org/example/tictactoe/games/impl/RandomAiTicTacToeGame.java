@@ -26,7 +26,7 @@ public class RandomAiTicTacToeGame extends TicTacToeGame implements AiMove {
      * @param playerX name of the X player
      * @param playerO name of the O player
      */
-    public RandomAiTicTacToeGame( String playerX, String playerO) {
+    public RandomAiTicTacToeGame(String playerX, String playerO) {
         super(playerX, playerO);
     }
 
